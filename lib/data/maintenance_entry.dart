@@ -26,6 +26,9 @@ class MaintenanceEntry extends HiveObject {
   @HiveField(6)
   String recommendations;
 
+  @HiveField(7)
+  int vehicleKey;
+
   MaintenanceEntry({
     required this.date,
     required this.title,
@@ -34,5 +37,6 @@ class MaintenanceEntry extends HiveObject {
     required this.cost,
     required this.category,
     required this.recommendations,
+    required this.vehicleKey
   });
 }

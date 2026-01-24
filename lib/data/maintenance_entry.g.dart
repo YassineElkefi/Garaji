@@ -24,13 +24,14 @@ class MaintenanceEntryAdapter extends TypeAdapter<MaintenanceEntry> {
       cost: fields[4] as double,
       category: fields[5] as String,
       recommendations: fields[6] as String,
+      vehicleKey: fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, MaintenanceEntry obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class MaintenanceEntryAdapter extends TypeAdapter<MaintenanceEntry> {
       ..writeByte(5)
       ..write(obj.category)
       ..writeByte(6)
-      ..write(obj.recommendations);
+      ..write(obj.recommendations)
+      ..writeByte(7)
+      ..write(obj.vehicleKey);
   }
 
   @override
