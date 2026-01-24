@@ -32,6 +32,15 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   }
 
   @override
+  void dispose() {
+    _brandController.dispose();
+    _modelController.dispose();
+    _yearController.dispose();
+    _mileageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Add Vehicle")),

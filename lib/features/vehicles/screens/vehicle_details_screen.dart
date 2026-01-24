@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garaji/data/maintenance_entry.dart';
 import 'package:garaji/data/vehicle.dart';
+import 'package:garaji/features/vehicles/screens/add_maintenance_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class VehicleDetailsScreen extends StatelessWidget {
@@ -102,7 +103,12 @@ class VehicleDetailsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          //Navigation to the Add maintenance Screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AddMaintenanceScreen(vehicle: vehicle),
+            ),
+          );
         },
       ),
     );
