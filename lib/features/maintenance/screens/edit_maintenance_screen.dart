@@ -30,7 +30,6 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing entry data
     _titleController.text = widget.entry.title;
     _descriptionController.text = widget.entry.description;
     _mileageController.text = widget.entry.mileage.toString();
@@ -43,7 +42,6 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
   void _saveMaintenance() {
     if (!_formKey.currentState!.validate()) return;
 
-    // Update the existing entry
     widget.entry.date = _selectedDate;
     widget.entry.title = _titleController.text.trim();
     widget.entry.description = _descriptionController.text.trim();
@@ -54,7 +52,6 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
 
     widget.entry.save();
 
-    // Update vehicle mileage if needed
     if (widget.vehicle.mileage < widget.entry.mileage) {
       widget.vehicle.mileage = widget.entry.mileage;
       widget.vehicle.save();
@@ -79,11 +76,22 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
       initialDate: _selectedDate,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF1A237E),
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Color(0xFF212121),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-      });
+      setState(() => _selectedDate = picked);
     }
   }
 
@@ -92,112 +100,334 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Maintenance'),
-        actions: [
-          IconButton(icon: const Icon(Icons.save), onPressed: _saveMaintenance),
-        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              // Title
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
-                validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-              ),
-
-              const SizedBox(height: 12),
-
-              // Category
-              DropdownButtonFormField<String>(
-                initialValue: _category,
-                decoration: const InputDecoration(labelText: 'Category'),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Maintenance',
-                    child: Text('Maintenance'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header Section
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.8),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  DropdownMenuItem(value: 'Repair', child: Text('Repair')),
-                  DropdownMenuItem(
-                    value: 'Inspection',
-                    child: Text('Inspection'),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.edit_note,
+                          color: Color(0xFFD4AF37),
+                          size: 32,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Edit Service',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${widget.vehicle.brand} ${widget.vehicle.model}',
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  DropdownMenuItem(value: 'Wash', child: Text('Wash')),
-                ],
-                onChanged: (value) {
-                  if (value != null) setState(() => _category = value);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              // Date
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(
-                  'Date: ${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
                 ),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: _pickDate,
-              ),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 32),
 
-              // Mileage
-              TextFormField(
-                controller: _mileageController,
-                decoration: const InputDecoration(labelText: 'Mileage (km)'),
-                keyboardType: TextInputType.number,
-                validator: (v) => v == null || int.tryParse(v) == null
-                    ? 'Invalid mileage'
-                    : null,
-              ),
+                // Form Card
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: Colors.grey.shade200),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Service Details',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1A237E),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
 
-              const SizedBox(height: 12),
+                        _buildTextField(
+                          controller: _titleController,
+                          label: 'Title',
+                          hint: 'e.g., Oil Change, Brake Inspection',
+                          icon: Icons.title,
+                          validator: (v) => v == null || v.isEmpty
+                              ? 'Title is required'
+                              : null,
+                        ),
+                        const SizedBox(height: 20),
 
-              // Cost
-              TextFormField(
-                controller: _costController,
-                decoration: const InputDecoration(labelText: 'Cost (DT)'),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
+                        DropdownButtonFormField<String>(
+                          initialValue: _category,
+                          decoration: InputDecoration(
+                            labelText: 'Category',
+                            prefixIcon: const Icon(
+                              Icons.category,
+                              color: Color(0xFFD4AF37),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'Maintenance',
+                              child: Text('Maintenance'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Repair',
+                              child: Text('Repair'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Inspection',
+                              child: Text('Inspection'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Wash',
+                              child: Text('Wash'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() => _category = value);
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 20),
+
+                        InkWell(
+                          onTap: _pickDate,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_today,
+                                  color: Color(0xFFD4AF37),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Service Date',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                  color: Color(0xFF616161),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        _buildTextField(
+                          controller: _mileageController,
+                          label: 'Mileage (km)',
+                          hint: 'e.g., 50000',
+                          icon: Icons.speed,
+                          keyboardType: TextInputType.number,
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return 'Mileage is required';
+                            }
+                            if (int.tryParse(v) == null) {
+                              return 'Invalid mileage';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+
+                        _buildTextField(
+                          controller: _costController,
+                          label: 'Cost (DT)',
+                          hint: 'e.g., 150.00',
+                          icon: Icons.payments,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return 'Cost is required';
+                            }
+                            if (double.tryParse(v) == null) {
+                              return 'Invalid cost';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+
+                        TextFormField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            labelText: 'Description',
+                            hintText: 'Detailed description of the service',
+                            prefixIcon: const Icon(
+                              Icons.description,
+                              color: Color(0xFFD4AF37),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                          ),
+                          maxLines: 3,
+                        ),
+                        const SizedBox(height: 20),
+
+                        TextFormField(
+                          controller: _recommendationsController,
+                          decoration: InputDecoration(
+                            labelText: 'Recommendations',
+                            hintText: 'Future maintenance recommendations',
+                            prefixIcon: const Icon(
+                              Icons.lightbulb,
+                              color: Color(0xFFD4AF37),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                          ),
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                validator: (v) => v == null || double.tryParse(v) == null
-                    ? 'Invalid cost'
-                    : null,
-              ),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 32),
 
-              // Description
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
-                maxLines: 3,
-              ),
-
-              const SizedBox(height: 12),
-
-              // Recommendations
-              TextFormField(
-                controller: _recommendationsController,
-                decoration: const InputDecoration(labelText: 'Recommendations'),
-                maxLines: 2,
-              ),
-
-              const SizedBox(height: 24),
-
-              ElevatedButton(
-                onPressed: _saveMaintenance,
-                child: const Text('Save Changes'),
-              ),
-            ],
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _saveMaintenance,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check_circle_outline, size: 24),
+                        SizedBox(width: 12),
+                        Text('Save Changes'),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        hintStyle: TextStyle(color: Colors.grey.shade400),
+        prefixIcon: Icon(icon, color: const Color(0xFFD4AF37)),
+      ),
+      validator: validator,
     );
   }
 }

@@ -14,6 +14,20 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return const StatsScreenContent();
+  }
+}
+
+class StatsScreenContent extends StatefulWidget {
+  const StatsScreenContent({super.key});
+
+  @override
+  State<StatsScreenContent> createState() => _StatsScreenContentState();
+}
+
+class _StatsScreenContentState extends State<StatsScreenContent> {
   int? _selectedVehicleKey;
   int _selectedYear = DateTime.now().year;
 
@@ -21,25 +35,31 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Statistics'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.calendar_today), text: 'Yearly'),
-              Tab(icon: Icon(Icons.calendar_month), text: 'Monthly'),
-            ],
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            title: const Text('Statistics'),
+            pinned: true,
+            floating: true,
+            elevation: 0,
+            backgroundColor: const Color(0xFF1A237E),
+            foregroundColor: Colors.white,
+            bottom: TabBar(
+              indicatorColor: const Color(0xFFD4AF37),
+              indicatorWeight: 3,
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white70,
+              tabs: const [
+                Tab(icon: Icon(Icons.calendar_today), text: 'Yearly'),
+                Tab(icon: Icon(Icons.calendar_month), text: 'Monthly'),
+              ],
+            ),
           ),
-        ),
+        ],
         body: Column(
           children: [
-            // Vehicle Filter
             _buildVehicleFilter(),
-
-            // Stats Summary Cards
             _buildSummaryCards(),
-
-            // Tab View with Charts
             Expanded(
               child: TabBarView(
                 children: [_buildYearlyTab(), _buildMonthlyTab()],
@@ -59,11 +79,21 @@ class _StatsScreenState extends State<StatsScreen> {
 
         return Container(
           padding: const EdgeInsets.all(16),
+          color: const Color(0xFFF5F7FA),
           child: DropdownButtonFormField<int?>(
             initialValue: _selectedVehicleKey,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Filter by Vehicle',
-              border: OutlineInputBorder(),
+              prefixIcon: const Icon(
+                Icons.filter_list,
+                color: Color(0xFFD4AF37),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
             ),
             items: [
               const DropdownMenuItem(value: null, child: Text('All Vehicles')),
@@ -88,8 +118,9 @@ class _StatsScreenState extends State<StatsScreen> {
     final avgCost = StatsService.getAverageCost(_selectedVehicleKey);
     final entryCount = StatsService.getEntryCount(_selectedVehicleKey);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      color: const Color(0xFFF5F7FA),
       child: Row(
         children: [
           Expanded(
@@ -97,25 +128,25 @@ class _StatsScreenState extends State<StatsScreen> {
               title: 'Total Cost',
               value: '${totalCost.toStringAsFixed(2)} DT',
               icon: Icons.payments,
-              color: Colors.blue,
+              color: const Color(0xFF1A237E),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Expanded(
             child: StatsSummaryCard(
               title: 'Average',
               value: '${avgCost.toStringAsFixed(2)} DT',
               icon: Icons.calculate,
-              color: Colors.green,
+              color: const Color(0xFF00897B),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Expanded(
             child: StatsSummaryCard(
               title: 'Entries',
               value: entryCount.toString(),
               icon: Icons.format_list_numbered,
-              color: Colors.orange,
+              color: const Color(0xFFD4AF37),
             ),
           ),
         ],
@@ -127,76 +158,170 @@ class _StatsScreenState extends State<StatsScreen> {
     final yearlyData = StatsService.getYearlyStats(_selectedVehicleKey);
     final categoryData = StatsService.getCategoryStats(_selectedVehicleKey);
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Yearly Trends',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 250,
-                  child: YearlyStatsChart(yearlyData: yearlyData),
-                ),
-              ],
+    return Container(
+      color: const Color(0xFFF5F7FA),
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            elevation: 2,
+            shadowColor: Colors.black.withValues(alpha: 0.1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A237E).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.trending_up,
+                          color: Color(0xFF1A237E),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Yearly Trends',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF212121),
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 250,
+                    child: YearlyStatsChart(yearlyData: yearlyData),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'By Category',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                ...categoryData.entries.map((entry) {
-                  final percentage =
-                      (entry.value /
-                      categoryData.values.reduce((a, b) => a + b) *
-                      100);
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(entry.key),
-                            Text(
-                              '${entry.value.toStringAsFixed(2)} DT (${percentage.toStringAsFixed(1)}%)',
-                              style: const TextStyle(
+          const SizedBox(height: 16),
+          Card(
+            elevation: 2,
+            shadowColor: Colors.black.withValues(alpha: 0.1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD4AF37).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.pie_chart,
+                          color: Color(0xFFD4AF37),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'By Category',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
+                                color: const Color(0xFF212121),
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  if (categoryData.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: Text('No category data available'),
+                      ),
+                    )
+                  else
+                    ...categoryData.entries.map((entry) {
+                      final percentage =
+                          (entry.value /
+                          categoryData.values.reduce((a, b) => a + b) *
+                          100);
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 12,
+                                      height: 12,
+                                      decoration: BoxDecoration(
+                                        color: _getCategoryColor(entry.key),
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      entry.key,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF212121),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  '${entry.value.toStringAsFixed(2)} DT (${percentage.toStringAsFixed(1)}%)',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1A237E),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: LinearProgressIndicator(
+                                value: percentage / 100,
+                                backgroundColor: Colors.grey.shade200,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  _getCategoryColor(entry.key),
+                                ),
+                                minHeight: 8,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        LinearProgressIndicator(
-                          value: percentage / 100,
-                          backgroundColor: Colors.grey[200],
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ],
+                      );
+                    }),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -204,62 +329,118 @@ class _StatsScreenState extends State<StatsScreen> {
     final yearlyData = StatsService.getYearlyStats(_selectedVehicleKey);
     final years = yearlyData.keys.toList();
 
-    return Column(
-      children: [
-        // Year Selector
-        if (years.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: DropdownButtonFormField<int>(
-              initialValue: years.contains(_selectedYear)
-                  ? _selectedYear
-                  : years.last,
-              decoration: const InputDecoration(
-                labelText: 'Select Year',
-                border: OutlineInputBorder(),
-              ),
-              items: years.map((year) {
-                return DropdownMenuItem(
-                  value: year,
-                  child: Text(year.toString()),
-                );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _selectedYear = value);
-                }
-              },
-            ),
-          ),
-
-        // Monthly Chart
-        Expanded(
-          child: Card(
-            margin: const EdgeInsets.all(16),
-            child: Padding(
+    return Container(
+      color: const Color(0xFFF5F7FA),
+      child: Column(
+        children: [
+          if (years.isNotEmpty)
+            Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Monthly Breakdown - $_selectedYear',
-                    style: Theme.of(context).textTheme.titleLarge,
+              child: DropdownButtonFormField<int>(
+                initialValue: years.contains(_selectedYear)
+                    ? _selectedYear
+                    : years.last,
+                decoration: InputDecoration(
+                  labelText: 'Select Year',
+                  prefixIcon: const Icon(
+                    Icons.date_range,
+                    color: Color(0xFFD4AF37),
                   ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: MonthlyStatsChart(
-                      monthlyData: StatsService.getMonthlyStats(
-                        _selectedYear,
-                        _selectedVehicleKey,
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                ),
+                items: years.map((year) {
+                  return DropdownMenuItem(
+                    value: year,
+                    child: Text(year.toString()),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _selectedYear = value);
+                  }
+                },
+              ),
+            ),
+          Expanded(
+            child: Card(
+              margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              elevation: 2,
+              shadowColor: Colors.black.withValues(alpha: 0.1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(
+                              0xFF1A237E,
+                            ).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.bar_chart,
+                            color: Color(0xFF1A237E),
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Monthly Breakdown - $_selectedYear',
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF212121),
+                                ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: MonthlyStatsChart(
+                        monthlyData: StatsService.getMonthlyStats(
+                          _selectedYear,
+                          _selectedVehicleKey,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category) {
+      case 'Maintenance':
+        return const Color(0xFF1A237E);
+      case 'Repair':
+        return const Color(0xFFC62828);
+      case 'Inspection':
+        return const Color(0xFF00897B);
+      case 'Wash':
+        return const Color(0xFFD4AF37);
+      default:
+        return Colors.grey;
+    }
   }
 }
