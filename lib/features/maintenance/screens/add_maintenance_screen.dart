@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:garaji/data/maintenance_entry.dart';
-import 'package:garaji/data/vehicle.dart';
+import 'package:garaji/data/models/maintenance_entry.dart';
+import 'package:garaji/data/models/vehicle.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AddMaintenanceScreen extends StatefulWidget {
