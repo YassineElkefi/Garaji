@@ -2,18 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:garaji/data/maintenance_entry.dart';
 import 'package:garaji/data/vehicle.dart';
 import 'package:garaji/features/vehicles/screens/add_maintenance_screen.dart';
+import 'package:garaji/features/vehicles/screens/edit_maintenance_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class VehicleDetailsScreen extends StatelessWidget {
+class VehicleDetailsScreen extends StatefulWidget {
   final Vehicle vehicle;
   const VehicleDetailsScreen({super.key, required this.vehicle});
 
+  @override
+  State<VehicleDetailsScreen> createState() => _VehicleDetailsScreenState();
+}
+
+class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final maintenanceBox = Hive.box<MaintenanceEntry>('maintenance');
 
     return Scaffold(
-      appBar: AppBar(title: Text('${vehicle.brand} ${vehicle.model}')),
+      appBar: AppBar(
+        title: Text('${widget.vehicle.brand} ${widget.vehicle.model}'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -27,12 +35,12 @@ class VehicleDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${vehicle.brand} ${vehicle.model}',
+                      '${widget.vehicle.brand} ${widget.vehicle.model}',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
-                    Text('Year: ${vehicle.year}'),
-                    Text('Moleage: ${vehicle.mileage} km'),
+                    Text('Year: ${widget.vehicle.year}'),
+                    Text('Moleage: ${widget.vehicle.mileage} km'),
                   ],
                 ),
               ),
@@ -53,7 +61,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                 builder: (context, Box<MaintenanceEntry> box, _) {
                   final entries =
                       box.values
-                          .where((e) => e.vehicleKey == vehicle.key)
+                          .where((e) => e.vehicleKey == widget.vehicle.key)
                           .toList()
                         ..sort((a, b) => b.date.compareTo(a.date));
 
@@ -82,6 +90,19 @@ class VehicleDetailsScreen extends StatelessWidget {
                             final e = entries[index];
                             return Card(
                               child: ListTile(
+                                onTap: () {
+                                  // Navigate to edit maintenance screen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => EditMaintenanceScreen(
+                                        entry: e,
+                                        vehicle: widget.vehicle,
+                                      ),
+                                    ),
+                                  );
+                                  setState(() {});
+                                },
                                 title: Text(e.title),
                                 subtitle: Text(
                                   '${e.date.day}/${e.date.month}/${e.date.year} • ${e.mileage} km}',
@@ -106,9 +127,10 @@ class VehicleDetailsScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddMaintenanceScreen(vehicle: vehicle),
+              builder: (_) => AddMaintenanceScreen(vehicle: widget.vehicle),
             ),
           );
+          setState(() {});
         },
       ),
     );
