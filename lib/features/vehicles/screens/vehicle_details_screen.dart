@@ -3,6 +3,7 @@ import 'package:garaji/data/models/maintenance_entry.dart';
 import 'package:garaji/data/models/vehicle.dart';
 import 'package:garaji/features/maintenance/screens/add_maintenance_screen.dart';
 import 'package:garaji/features/maintenance/screens/edit_maintenance_screen.dart';
+import 'package:garaji/features/vehicles/services/pdf_export_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class VehicleDetailsScreen extends StatelessWidget {
@@ -43,13 +44,58 @@ class VehicleDetailsScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _exportToPdf(
+    BuildContext context,
+    List<MaintenanceEntry> entries,
+  ) async {
+    if (entries.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No maintenance records to export')),
+      );
+      return;
+    }
+
+    try {
+      await PdfExportService.exportMaintenanceToPdf(vehicle, entries);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('PDF generated successfully')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error generating PDF: $e')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final vehicleBox = Hive.box<Vehicle>('vehicles');
     final maintenanceBox = Hive.box<MaintenanceEntry>('maintenance');
 
     return Scaffold(
-      appBar: AppBar(title: Text('${vehicle.brand} ${vehicle.model}')),
+      appBar: AppBar(
+        title: Text('${vehicle.brand} ${vehicle.model}'),
+        actions: [
+          ValueListenableBuilder(
+            valueListenable: maintenanceBox.listenable(),
+            builder: (context, Box<MaintenanceEntry> box, _) {
+              final entries = box.values
+                  .where((e) => e.vehicleKey == vehicle.key)
+                  .toList();
+
+              return IconButton(
+                icon: const Icon(Icons.picture_as_pdf),
+                onPressed: () => _exportToPdf(context, entries),
+                tooltip: 'Export to PDF',
+              );
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
