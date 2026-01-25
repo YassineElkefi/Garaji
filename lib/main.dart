@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:garaji/data/maintenance_entry.dart';
-import 'package:garaji/data/vehicle.dart';
+import 'package:garaji/data/models/maintenance_entry.dart';
+import 'package:garaji/data/models/vehicle.dart';
 import 'package:garaji/features/vehicles/screens/vehicles_list_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
@@ -17,9 +17,9 @@ void main() async{
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,6 +27,6 @@ class MyApp extends StatelessWidget{
       title: 'Garaji',
       theme: ThemeData(useMaterial3: true),
       home: const VehiclesListScreen(),
-      );
+    );
   }
 }

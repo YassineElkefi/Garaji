@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:garaji/data/maintenance_entry.dart';
-import 'package:garaji/data/vehicle.dart';
+import 'package:garaji/data/models/maintenance_entry.dart';
+import 'package:garaji/data/models/vehicle.dart';
 
 class EditMaintenanceScreen extends StatefulWidget {
   final MaintenanceEntry entry;
@@ -24,8 +24,8 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
   final _costController = TextEditingController();
   final _recommendationsController = TextEditingController();
 
-  DateTime _selectedDate = DateTime.now();
-  final String _category = 'Maintenance';
+  late DateTime _selectedDate;
+  late String _category;
 
   @override
   void initState() {
@@ -37,6 +37,7 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
     _costController.text = widget.entry.cost.toString();
     _recommendationsController.text = widget.entry.recommendations;
     _selectedDate = widget.entry.date;
+    _category = widget.entry.category;
   }
 
   void _saveMaintenance() {
@@ -90,7 +91,7 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.entry.title),
+        title: const Text('Edit Maintenance'),
         actions: [
           IconButton(icon: const Icon(Icons.save), onPressed: _saveMaintenance),
         ],
@@ -101,47 +102,39 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
           key: _formKey,
           child: ListView(
             children: [
+              // Title
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Title'),
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter a title'
-                    : null,
+                validator: (v) => v == null || v.isEmpty ? 'Required' : null,
               ),
-              TextFormField(
-                //initialValue: widget.entry.description,
-                controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter a description'
-                    : null,
+
+              const SizedBox(height: 12),
+
+              // Category
+              DropdownButtonFormField<String>(
+                initialValue: _category,
+                decoration: const InputDecoration(labelText: 'Category'),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'Maintenance',
+                    child: Text('Maintenance'),
+                  ),
+                  DropdownMenuItem(value: 'Repair', child: Text('Repair')),
+                  DropdownMenuItem(
+                    value: 'Inspection',
+                    child: Text('Inspection'),
+                  ),
+                  DropdownMenuItem(value: 'Wash', child: Text('Wash')),
+                ],
+                onChanged: (value) {
+                  if (value != null) setState(() => _category = value);
+                },
               ),
-              TextFormField(
-                //initialValue: widget.entry.mileage.toString(),
-                controller: _mileageController,
-                decoration: const InputDecoration(labelText: 'Mileage'),
-                keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value == null || int.tryParse(value) == null
-                    ? 'Please enter a valid mileage'
-                    : null,
-              ),
-              TextFormField(
-                //initialValue: widget.entry.cost.toString(),
-                controller: _costController,
-                decoration: const InputDecoration(labelText: 'Cost'),
-                keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value == null || double.tryParse(value) == null
-                    ? 'Please enter a valid cost'
-                    : null,
-              ),
-              TextFormField(
-                //initialValue: widget.entry.recommendations,
-                controller: _recommendationsController,
-                decoration: const InputDecoration(labelText: 'Recommendations'),
-              ),
-              const SizedBox(height: 16),
+
+              const SizedBox(height: 12),
+
+              // Date
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(
@@ -149,6 +142,57 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                 ),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: _pickDate,
+              ),
+
+              const SizedBox(height: 12),
+
+              // Mileage
+              TextFormField(
+                controller: _mileageController,
+                decoration: const InputDecoration(labelText: 'Mileage (km)'),
+                keyboardType: TextInputType.number,
+                validator: (v) => v == null || int.tryParse(v) == null
+                    ? 'Invalid mileage'
+                    : null,
+              ),
+
+              const SizedBox(height: 12),
+
+              // Cost
+              TextFormField(
+                controller: _costController,
+                decoration: const InputDecoration(labelText: 'Cost (DT)'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: (v) => v == null || double.tryParse(v) == null
+                    ? 'Invalid cost'
+                    : null,
+              ),
+
+              const SizedBox(height: 12),
+
+              // Description
+              TextFormField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(labelText: 'Description'),
+                maxLines: 3,
+              ),
+
+              const SizedBox(height: 12),
+
+              // Recommendations
+              TextFormField(
+                controller: _recommendationsController,
+                decoration: const InputDecoration(labelText: 'Recommendations'),
+                maxLines: 2,
+              ),
+
+              const SizedBox(height: 24),
+
+              ElevatedButton(
+                onPressed: _saveMaintenance,
+                child: const Text('Save Changes'),
               ),
             ],
           ),

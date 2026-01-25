@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:garaji/data/models/vehicle.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
-class AddVehicleScreen extends StatefulWidget {
-  const AddVehicleScreen({super.key});
+class EditVehicleScreen extends StatefulWidget {
+  final Vehicle vehicle;
+  const EditVehicleScreen({super.key, required this.vehicle});
 
   @override
-  State<AddVehicleScreen> createState() => _AddVehicleScreenState();
+  State<EditVehicleScreen> createState() => _EditVehicleScreenState();
 }
 
-class _AddVehicleScreenState extends State<AddVehicleScreen> {
+class _EditVehicleScreenState extends State<EditVehicleScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _brandController = TextEditingController();
@@ -17,17 +17,24 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   final _yearController = TextEditingController();
   final _mileageController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _brandController.text = widget.vehicle.brand;
+    _modelController.text = widget.vehicle.model;
+    _yearController.text = widget.vehicle.year.toString();
+    _mileageController.text = widget.vehicle.mileage.toString();
+  }
+
   void _saveVehicle() {
     if (!_formKey.currentState!.validate()) return;
 
-    final vehicle = Vehicle(
-      brand: _brandController.text.trim(),
-      model: _modelController.text.trim(),
-      year: int.parse(_yearController.text),
-      mileage: int.parse(_mileageController.text),
-    );
+    widget.vehicle.brand = _brandController.text.trim();
+    widget.vehicle.model = _modelController.text.trim();
+    widget.vehicle.year = int.parse(_yearController.text);
+    widget.vehicle.mileage = int.parse(_mileageController.text);
 
-    Hive.box<Vehicle>('vehicles').add(vehicle);
+    widget.vehicle.save();
     Navigator.pop(context);
   }
 
@@ -43,7 +50,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Vehicle")),
+      appBar: AppBar(title: const Text("Edit Vehicle")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -76,6 +83,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
               TextFormField(
                 controller: _mileageController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Mileage'),
                 validator: (v) => v == null || int.tryParse(v) == null
                     ? 'Invalid Mileage'
@@ -85,7 +93,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
               ElevatedButton(
                 onPressed: _saveVehicle,
-                child: const Text('Save Vehicle'),
+                child: const Text('Save Changes'),
               ),
             ],
           ),
