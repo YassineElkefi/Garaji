@@ -8,6 +8,13 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:open_filex/open_filex.dart';
 
 class PdfExportService {
+  // App theme colors
+  static final PdfColor primaryColor = PdfColor.fromHex('#1A237E');
+  static final PdfColor secondaryColor = PdfColor.fromHex('#D4AF37');
+  static final PdfColor surfaceColor = PdfColor.fromHex('#F5F7FA');
+  static final PdfColor errorColor = PdfColor.fromHex('#C62828');
+  static final PdfColor grey600 = PdfColor.fromHex('#616161');
+
   static Future<String> exportMaintenanceToPdf(
     Vehicle vehicle,
     List<MaintenanceEntry> entries,
@@ -74,7 +81,7 @@ class PdfExportService {
     return pw.Container(
       padding: const pw.EdgeInsets.all(16),
       decoration: pw.BoxDecoration(
-        color: PdfColors.blue700,
+        color: primaryColor,
         borderRadius: pw.BorderRadius.circular(8),
       ),
       child: pw.Column(
@@ -91,7 +98,11 @@ class PdfExportService {
           pw.SizedBox(height: 8),
           pw.Text(
             '${vehicle.brand} ${vehicle.model}',
-            style: pw.TextStyle(fontSize: 18, color: PdfColors.white),
+            style: pw.TextStyle(
+              fontSize: 18,
+              color: PdfColors.white,
+              fontFallback: [pw.Font.times()],
+            ),
           ),
           pw.SizedBox(height: 4),
           pw.Text(
@@ -126,10 +137,7 @@ class PdfExportService {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.center,
       children: [
-        pw.Text(
-          label,
-          style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
-        ),
+        pw.Text(label, style: pw.TextStyle(fontSize: 10, color: grey600)),
         pw.SizedBox(height: 4),
         pw.Text(
           value,
@@ -154,14 +162,14 @@ class PdfExportService {
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
-            color: PdfColors.blue700,
+            color: primaryColor,
           ),
         ),
         pw.SizedBox(height: 12),
         pw.Container(
           padding: const pw.EdgeInsets.all(16),
           decoration: pw.BoxDecoration(
-            color: PdfColors.grey100,
+            color: surfaceColor,
             borderRadius: pw.BorderRadius.circular(8),
           ),
           child: pw.Row(
@@ -170,17 +178,17 @@ class PdfExportService {
               _buildSummaryCard(
                 'Total Spent',
                 '${totalCost.toStringAsFixed(2)} DT',
-                PdfColors.blue700,
+                primaryColor,
               ),
               _buildSummaryCard(
                 'Average Cost',
                 '${avgCost.toStringAsFixed(2)} DT',
-                PdfColors.green700,
+                secondaryColor,
               ),
               _buildSummaryCard(
                 'Total Entries',
                 entryCount.toString(),
-                PdfColors.orange700,
+                errorColor,
               ),
             ],
           ),
@@ -192,7 +200,7 @@ class PdfExportService {
             style: pw.TextStyle(
               fontSize: 12,
               fontWeight: pw.FontWeight.bold,
-              color: PdfColors.grey700,
+              color: grey600,
             ),
           ),
           pw.SizedBox(height: 8),
@@ -239,10 +247,7 @@ class PdfExportService {
   ) {
     return pw.Column(
       children: [
-        pw.Text(
-          label,
-          style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
-        ),
+        pw.Text(label, style: pw.TextStyle(fontSize: 10, color: grey600)),
         pw.SizedBox(height: 4),
         pw.Text(
           value,
@@ -265,7 +270,7 @@ class PdfExportService {
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
-            color: PdfColors.blue700,
+            color: primaryColor,
           ),
         ),
         pw.SizedBox(height: 12),
@@ -281,7 +286,7 @@ class PdfExportService {
           children: [
             // Header
             pw.TableRow(
-              decoration: const pw.BoxDecoration(color: PdfColors.blue700),
+              decoration: pw.BoxDecoration(color: primaryColor),
               children: [
                 _buildTableCell('Title', isHeader: true),
                 _buildTableCell('Date', isHeader: true),
@@ -336,7 +341,7 @@ class PdfExportService {
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
-            color: PdfColors.blue700,
+            color: primaryColor,
           ),
         ),
         pw.SizedBox(height: 12),
@@ -367,14 +372,19 @@ class PdfExportService {
                         vertical: 4,
                       ),
                       decoration: pw.BoxDecoration(
-                        color: PdfColors.blue100,
+                        color: PdfColor(
+                          secondaryColor.red,
+                          secondaryColor.green,
+                          secondaryColor.blue,
+                          0.2,
+                        ),
                         borderRadius: pw.BorderRadius.circular(4),
                       ),
                       child: pw.Text(
                         entry.category,
                         style: pw.TextStyle(
                           fontSize: 9,
-                          color: PdfColors.blue700,
+                          color: primaryColor,
                           fontWeight: pw.FontWeight.bold,
                         ),
                       ),
@@ -384,45 +394,21 @@ class PdfExportService {
                 pw.SizedBox(height: 8),
                 pw.Row(
                   children: [
-                    pw.Icon(
-                      const pw.IconData(0xe8df),
-                      size: 10,
-                      color: PdfColors.grey600,
-                    ),
-                    pw.SizedBox(width: 4),
                     pw.Text(
-                      DateFormat('MMMM dd, yyyy').format(entry.date),
-                      style: const pw.TextStyle(
-                        fontSize: 9,
-                        color: PdfColors.grey600,
-                      ),
+                      'Date: ${DateFormat('MMMM dd, yyyy').format(entry.date)}',
+                      style: pw.TextStyle(fontSize: 9, color: grey600),
                     ),
                     pw.SizedBox(width: 16),
-                    pw.Icon(
-                      const pw.IconData(0xe1e9),
-                      size: 10,
-                      color: PdfColors.grey600,
-                    ),
-                    pw.SizedBox(width: 4),
                     pw.Text(
-                      '${entry.mileage} km',
-                      style: const pw.TextStyle(
-                        fontSize: 9,
-                        color: PdfColors.grey600,
-                      ),
+                      'Mileage: ${entry.mileage} km',
+                      style: pw.TextStyle(fontSize: 9, color: grey600),
                     ),
                     pw.SizedBox(width: 16),
-                    pw.Icon(
-                      const pw.IconData(0xe25a),
-                      size: 10,
-                      color: PdfColors.grey600,
-                    ),
-                    pw.SizedBox(width: 4),
                     pw.Text(
-                      '${entry.cost.toStringAsFixed(2)} DT',
+                      'Cost: ${entry.cost.toStringAsFixed(2)} DT',
                       style: pw.TextStyle(
                         fontSize: 9,
-                        color: PdfColors.green700,
+                        color: secondaryColor,
                         fontWeight: pw.FontWeight.bold,
                       ),
                     ),
@@ -472,7 +458,7 @@ class PdfExportService {
       margin: const pw.EdgeInsets.only(top: 16),
       child: pw.Text(
         'Page ${context.pageNumber} of ${context.pagesCount}',
-        style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
+        style: pw.TextStyle(fontSize: 10, color: grey600),
       ),
     );
   }

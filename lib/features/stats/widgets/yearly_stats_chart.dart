@@ -9,10 +9,28 @@ class YearlyStatsChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (yearlyData.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(32),
-          child: Text('No maintenance data available'),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A237E).withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.trending_up,
+                size: 48,
+                color: Color(0xFF1A237E),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'No maintenance data available',
+              style: TextStyle(fontSize: 16, color: Color(0xFF616161)),
+            ),
+          ],
         ),
       );
     }
@@ -20,7 +38,7 @@ class YearlyStatsChart extends StatelessWidget {
     final maxY = yearlyData.values.reduce((a, b) => a > b ? a : b);
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(right: 16, top: 16),
       child: LineChart(
         LineChartData(
           maxY: maxY * 1.2,
@@ -32,12 +50,31 @@ class YearlyStatsChart extends StatelessWidget {
                 return FlSpot(index.toDouble(), entry.value);
               }).toList(),
               isCurved: true,
-              color: Colors.blue,
-              barWidth: 3,
-              dotData: const FlDotData(show: true),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1A237E), Color(0xFFD4AF37)],
+              ),
+              barWidth: 4,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, barData, index) {
+                  return FlDotCirclePainter(
+                    radius: 5,
+                    color: Colors.white,
+                    strokeWidth: 3,
+                    strokeColor: const Color(0xFF1A237E),
+                  );
+                },
+              ),
               belowBarData: BarAreaData(
                 show: true,
-                color: Colors.blue.withOpacity(0.3),
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF1A237E).withValues(alpha: 0.3),
+                    const Color(0xFFD4AF37).withValues(alpha: 0.1),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
           ],
@@ -45,11 +82,15 @@ class YearlyStatsChart extends StatelessWidget {
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 40,
+                reservedSize: 45,
                 getTitlesWidget: (value, meta) {
                   return Text(
                     '${value.toInt()}',
-                    style: const TextStyle(fontSize: 10),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF616161),
+                      fontWeight: FontWeight.w500,
+                    ),
                   );
                 },
               ),
@@ -64,7 +105,11 @@ class YearlyStatsChart extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(
                         yearlyData.keys.elementAt(index).toString(),
-                        style: const TextStyle(fontSize: 10),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Color(0xFF616161),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     );
                   }
@@ -79,7 +124,13 @@ class YearlyStatsChart extends StatelessWidget {
               sideTitles: SideTitles(showTitles: false),
             ),
           ),
-          gridData: FlGridData(show: true, drawVerticalLine: false),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (value) {
+              return FlLine(color: Colors.grey.shade300, strokeWidth: 1);
+            },
+          ),
           borderData: FlBorderData(show: false),
         ),
       ),
