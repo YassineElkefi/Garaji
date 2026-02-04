@@ -111,13 +111,13 @@ class VehiclesListScreenContent extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(32),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A237E).withValues(alpha: 0.1),
+                      color: const Color(0xFFDC143C).withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.directions_car,
                       size: 80,
-                      color: Color(0xFF1A237E),
+                      color: Color(0xFFDC143C),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -126,7 +126,7 @@ class VehiclesListScreenContent extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF212121),
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -206,21 +206,12 @@ class VehiclesListScreenContent extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    const Color(0xFF1A237E),
-                                    const Color(
-                                      0xFF1A237E,
-                                    ).withValues(alpha: 0.7),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                                color: const Color(0xFF2C2C2C),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
                                 Icons.directions_car,
-                                color: Color(0xFFD4AF37),
+                                color: Colors.white,
                                 size: 32,
                               ),
                             ),
@@ -234,7 +225,7 @@ class VehiclesListScreenContent extends StatelessWidget {
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
-                                      color: Color(0xFF212121),
+                                      color: Colors.white,
                                     ),
                                   ),
                                   const SizedBox(height: 6),
@@ -274,15 +265,13 @@ class VehiclesListScreenContent extends StatelessWidget {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                color: const Color(
-                                  0xFFD4AF37,
-                                ).withValues(alpha: 0.1),
+                                color: const Color(0xFFDC143C).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: IconButton(
                                 icon: const Icon(
                                   Icons.edit_outlined,
-                                  color: Color(0xFFD4AF37),
+                                  color: Color(0xFFDC143C),
                                 ),
                                 onPressed: () {
                                   Navigator.push(

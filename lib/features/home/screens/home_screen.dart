@@ -62,15 +62,15 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       child: BackdropFilter(
         filter: ColorFilter.mode(
-          Colors.white.withValues(alpha: 0.8),
-          BlendMode.lighten,
+          const Color(0xFF1E1E1E).withValues(alpha: 0.8),
+          BlendMode.srcOver,
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.6),
+            color: const Color(0xFF1E1E1E).withValues(alpha: 0.85),
             border: Border(
               top: BorderSide(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: const Color(0xFFDC143C).withValues(alpha: 0.2),
                 width: 1,
               ),
             ),
@@ -104,10 +104,16 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildStandardBottomNav() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E1E1E),
+        border: Border(
+          top: BorderSide(
+            color: const Color(0xFFDC143C).withValues(alpha: 0.2),
+            width: 1,
+          ),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, -4),
             spreadRadius: 0,
@@ -163,10 +169,10 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         decoration: isSelected
             ? BoxDecoration(
-                color: const Color(0xFFD4AF37).withValues(alpha: 0.15),
+                color: const Color(0xFFDC143C).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: const Color(0xFFD4AF37).withValues(alpha: 0.3),
+                  color: const Color(0xFFDC143C).withValues(alpha: 0.4),
                   width: 1.5,
                 ),
               )
@@ -181,10 +187,8 @@ class _HomeScreenState extends State<HomeScreen>
               child: Icon(
                 icon,
                 color: isSelected
-                    ? const Color(0xFFD4AF37)
-                    : (isIOS
-                          ? const Color(0xFF1A237E).withValues(alpha: 0.4)
-                          : Colors.grey.shade400),
+                    ? const Color(0xFFDC143C)
+                    : const Color(0xFF757575),
                 size: 26,
               ),
             ),
@@ -195,10 +199,8 @@ class _HomeScreenState extends State<HomeScreen>
                 fontSize: isSelected ? 13 : 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected
-                    ? const Color(0xFF1A237E)
-                    : (isIOS
-                          ? const Color(0xFF1A237E).withValues(alpha: 0.4)
-                          : Colors.grey.shade400),
+                    ? Colors.white
+                    : const Color(0xFF757575),
               ),
               child: Text(label),
             ),

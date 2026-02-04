@@ -42,7 +42,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
             pinned: true,
             floating: true,
             elevation: 0,
-            backgroundColor: const Color(0xFF1A237E),
+            backgroundColor: const Color(0xFF111111),
             foregroundColor: Colors.white,
             bottom: TabBar(
               indicatorColor: const Color(0xFFD4AF37),
@@ -79,7 +79,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
 
         return Container(
           padding: const EdgeInsets.all(16),
-          color: const Color(0xFFF5F7FA),
+          color: const Color(0xFF000000),
           child: DropdownButtonFormField<int?>(
             initialValue: _selectedVehicleKey,
             decoration: InputDecoration(
@@ -89,10 +89,10 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                 color: Color(0xFFD4AF37),
               ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: const Color(0xFF2C2C2C),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
               ),
             ),
             items: [
@@ -120,7 +120,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      color: const Color(0xFFF5F7FA),
+      color: const Color(0xFF000000),
       child: Row(
         children: [
           Expanded(
@@ -128,7 +128,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
               title: 'Total Cost',
               value: '${totalCost.toStringAsFixed(2)} DT',
               icon: Icons.payments,
-              color: const Color(0xFF1A237E),
+              color: const Color(0xFFDC143C),
             ),
           ),
           const SizedBox(width: 12),
@@ -159,12 +159,13 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
     final categoryData = StatsService.getCategoryStats(_selectedVehicleKey);
 
     return Container(
-      color: const Color(0xFFF5F7FA),
+      color: const Color(0xFF000000),
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           Card(
             elevation: 2,
+            color: const Color(0xFF1E1E1E),
             shadowColor: Colors.black.withValues(alpha: 0.1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
@@ -179,12 +180,12 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1A237E).withValues(alpha: 0.1),
+                          color: const Color(0xFFDC143C).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
                           Icons.trending_up,
-                          color: Color(0xFF1A237E),
+                          color: Color(0xFFDC143C),
                           size: 20,
                         ),
                       ),
@@ -195,7 +196,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF212121),
+                                color: const Color(0xFFFFFFFF),
                               ),
                         ),
                       ),
@@ -213,6 +214,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
           const SizedBox(height: 16),
           Card(
             elevation: 2,
+            color: const Color(0xFF1E1E1E),
             shadowColor: Colors.black.withValues(alpha: 0.1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
@@ -243,7 +245,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF212121),
+                                color: const Color(0xFFFFFFFF),
                               ),
                         ),
                       ),
@@ -286,7 +288,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                                       entry.key,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        color: Color(0xFF212121),
+                                        color: Color(0xFFFFFFFF),
                                       ),
                                     ),
                                   ],
@@ -295,7 +297,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                                   '${entry.value.toStringAsFixed(2)} DT (${percentage.toStringAsFixed(1)}%)',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1A237E),
+                                    color: Color(0xFFDC143C),
                                   ),
                                 ),
                               ],
@@ -305,7 +307,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
                                 value: percentage / 100,
-                                backgroundColor: Colors.grey.shade200,
+                                backgroundColor: const Color(0xFF2C2C2C),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   _getCategoryColor(entry.key),
                                 ),
@@ -330,7 +332,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
     final years = yearlyData.keys.toList();
 
     return Container(
-      color: const Color(0xFFF5F7FA),
+      color: const Color(0xFF000000),
       child: Column(
         children: [
           if (years.isNotEmpty)
@@ -347,10 +349,10 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                     color: Color(0xFFD4AF37),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: const Color(0xFF2C2C2C),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
+                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                   ),
                 ),
                 items: years.map((year) {
@@ -370,6 +372,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
             child: Card(
               margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               elevation: 2,
+              color: const Color(0xFF1E1E1E),
               shadowColor: Colors.black.withValues(alpha: 0.1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -385,13 +388,13 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(
-                              0xFF1A237E,
+                              0xFFDC143C,
                             ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
                             Icons.bar_chart,
-                            color: Color(0xFF1A237E),
+                            color: Color(0xFFDC143C),
                             size: 20,
                           ),
                         ),
@@ -402,7 +405,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF212121),
+                                  color: const Color(0xFFFFFFFF),
                                 ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -432,7 +435,7 @@ class _StatsScreenContentState extends State<StatsScreenContent> {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Maintenance':
-        return const Color(0xFF1A237E);
+        return const Color(0xFFDC143C);
       case 'Repair':
         return const Color(0xFFC62828);
       case 'Inspection':

@@ -80,10 +80,10 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF1A237E),
+              primary: Color(0xFFDC143C),
               onPrimary: Colors.white,
               surface: Colors.white,
-              onSurface: Color(0xFF212121),
+              onSurface: Colors.white,
             ),
           ),
           child: child!,
@@ -176,9 +176,10 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                 // Form Card
                 Card(
                   elevation: 0,
+                  color: const Color(0xFF1E1E1E),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: Colors.grey.shade200),
+                    side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(20),
@@ -190,7 +191,7 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF1A237E),
+                            color: Color(0xFFDC143C),
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -215,11 +216,11 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                               color: Color(0xFFD4AF37),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: const Color(0xFF2C2C2C),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                color: Colors.grey.shade300,
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ),
                           ),
@@ -255,9 +256,9 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: const Color(0xFF2C2C2C),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey.shade300),
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                             ),
                             child: Row(
                               children: [
@@ -348,11 +349,11 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                               color: Color(0xFFD4AF37),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: const Color(0xFF2C2C2C),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                color: Colors.grey.shade300,
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ),
                           ),
@@ -370,11 +371,11 @@ class _EditMaintenanceScreenState extends State<EditMaintenanceScreen> {
                               color: Color(0xFFD4AF37),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: const Color(0xFF2C2C2C),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                color: Colors.grey.shade300,
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ),
                           ),

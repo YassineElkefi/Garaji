@@ -142,7 +142,7 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF1A237E),
+                            color: Color(0xFFEB0029),
                           ),
                         ),
                         const SizedBox(height: 24),

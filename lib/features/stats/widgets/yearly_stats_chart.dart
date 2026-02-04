@@ -16,13 +16,13 @@ class YearlyStatsChart extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF1A237E).withValues(alpha: 0.1),
+                color: const Color(0xFFDC143C).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.trending_up,
                 size: 48,
-                color: Color(0xFF1A237E),
+                color: Color(0xFFDC143C),
               ),
             ),
             const SizedBox(height: 16),
@@ -51,7 +51,7 @@ class YearlyStatsChart extends StatelessWidget {
               }).toList(),
               isCurved: true,
               gradient: const LinearGradient(
-                colors: [Color(0xFF1A237E), Color(0xFFD4AF37)],
+                colors: [Color(0xFFDC143C), Color(0xFFD4AF37)],
               ),
               barWidth: 4,
               dotData: FlDotData(
@@ -61,7 +61,7 @@ class YearlyStatsChart extends StatelessWidget {
                     radius: 5,
                     color: Colors.white,
                     strokeWidth: 3,
-                    strokeColor: const Color(0xFF1A237E),
+                    strokeColor: const Color(0xFFDC143C),
                   );
                 },
               ),
@@ -69,7 +69,7 @@ class YearlyStatsChart extends StatelessWidget {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF1A237E).withValues(alpha: 0.3),
+                    const Color(0xFFDC143C).withValues(alpha: 0.3),
                     const Color(0xFFD4AF37).withValues(alpha: 0.1),
                   ],
                   begin: Alignment.topCenter,
@@ -128,7 +128,7 @@ class YearlyStatsChart extends StatelessWidget {
             show: true,
             drawVerticalLine: false,
             getDrawingHorizontalLine: (value) {
-              return FlLine(color: Colors.grey.shade300, strokeWidth: 1);
+              return FlLine(color: Colors.white.withValues(alpha: 0.1), strokeWidth: 1);
             },
           ),
           borderData: FlBorderData(show: false),
