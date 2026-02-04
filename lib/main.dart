@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:garaji/data/models/maintenance_entry.dart';
 import 'package:garaji/data/models/vehicle.dart';
+import 'package:garaji/data/models/service_reminder.dart';
 import 'package:garaji/features/home/screens/home_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:garaji/data/providers/reminder_provider.dart';
+import 'package:garaji/features/reminders/services/notification_service.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,11 +15,24 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(VehicleAdapter());
   Hive.registerAdapter(MaintenanceEntryAdapter());
+  Hive.registerAdapter(ServiceReminderAdapter());
 
   await Hive.openBox<Vehicle>('vehicles');
   await Hive.openBox<MaintenanceEntry>('maintenance');
+  await Hive.openBox<ServiceReminder>('serviceReminders');
 
-  runApp(const MyApp());
+  final notificationService = NotificationService();
+  await notificationService.init();
+  await notificationService.requestPermissions();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ReminderProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

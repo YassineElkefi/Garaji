@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:garaji/data/models/maintenance_entry.dart';
 import 'package:garaji/data/models/vehicle.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:garaji/data/providers/reminder_provider.dart';
+import 'package:provider/provider.dart';
 class AddMaintenanceScreen extends StatefulWidget {
   final Vehicle vehicle;
   const AddMaintenanceScreen({super.key, required this.vehicle});
@@ -22,6 +23,7 @@ class _AddMaintenanceScreenState extends State<AddMaintenanceScreen> {
 
   DateTime _selectedDate = DateTime.now();
   String _category = 'Maintenance';
+  bool _updateReminders = true;
 
   void _saveMaintenance() {
     if (!_formKey.currentState!.validate()) return;
@@ -43,6 +45,19 @@ class _AddMaintenanceScreenState extends State<AddMaintenanceScreen> {
       widget.vehicle.mileage = entry.mileage;
       widget.vehicle.save();
     }
+    if (_updateReminders) {
+      final provider = Provider.of<ReminderProvider>(context, listen: false);
+      final reminders = provider.getRemindersForVehicle(widget.vehicle.key as int);
+      
+      for (var reminder in reminders) {
+        if (reminder.isActive && reminder.category == _category) {
+          reminder.lastServiceDate = _selectedDate;
+          reminder.lastServiceMileage = entry.mileage;
+          provider.updateReminder(reminder);
+        }
+      }
+    }
+    
     Navigator.pop(context);
   }
 

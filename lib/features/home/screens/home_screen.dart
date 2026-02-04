@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:garaji/features/vehicles/screens/vehicles_list_screen.dart';
 import 'package:garaji/features/stats/screens/stats_screen.dart';
 
+import 'package:garaji/features/reminders/screens/reminders_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -17,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   final List<Widget> _screens = [
     const VehiclesListScreenContent(),
+    const RemindersScreen(),
     const StatsScreenContent(),
   ];
 
@@ -89,6 +92,11 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   _buildNavBarItem(
                     index: 1,
+                    icon: Icons.notifications_active_rounded,
+                    label: 'Reminders',
+                  ),
+                  _buildNavBarItem(
+                    index: 2,
                     icon: Icons.bar_chart_rounded,
                     label: 'Statistics',
                   ),
@@ -134,6 +142,11 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               _buildNavBarItem(
                 index: 1,
+                icon: Icons.notifications_active_rounded,
+                label: 'Reminders',
+              ),
+              _buildNavBarItem(
+                index: 2,
                 icon: Icons.bar_chart_rounded,
                 label: 'Statistics',
               ),

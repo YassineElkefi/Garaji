@@ -5,7 +5,11 @@ import 'package:garaji/features/maintenance/screens/add_maintenance_screen.dart'
 import 'package:garaji/features/maintenance/screens/edit_maintenance_screen.dart';
 import 'package:garaji/features/vehicles/services/pdf_export_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:garaji/data/providers/reminder_provider.dart';
+import 'package:garaji/features/reminders/screens/add_reminder_screen.dart';
+import 'package:garaji/features/reminders/screens/edit_reminder_screen.dart';
+import 'package:garaji/features/reminders/widgets/reminder_card.dart';
+import 'package:provider/provider.dart';
 class VehicleDetailsScreen extends StatelessWidget {
   final Vehicle vehicle;
   const VehicleDetailsScreen({super.key, required this.vehicle});
@@ -281,6 +285,101 @@ class VehicleDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 24),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Active Reminders',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.notification_add, color: Color(0xFFDC143C)),
+                  onPressed: () {
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => AddReminderScreen(preselectedVehicleKey: vehicle.key as int?),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            
+            const SizedBox(height: 8),
+
+            Consumer<ReminderProvider>(
+              builder: (context, provider, _) {
+                final reminders = provider.getRemindersForVehicle(vehicle.key as int)
+                    .where((r) => r.isActive).toList();
+                
+                if (reminders.isEmpty) {
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2C2C2C),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    ),
+                    child: const Text(
+                      'No active reminders',
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                }
+
+                return Column(
+                  children: reminders.map((reminder) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ReminderCard(
+                        reminder: reminder,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditReminderScreen(reminder: reminder),
+                            ),
+                          );
+                        },
+                        onEdit: () {
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditReminderScreen(reminder: reminder),
+                            ),
+                          );
+                        },
+                        onComplete: () {
+                          // Simplified completion for now, could show dialog
+                          final provider = Provider.of<ReminderProvider>(context, listen: false);
+                          reminder.lastServiceDate = DateTime.now();
+                          // Assuming lastServiceMileage is mandatory for mileage-based, but we need input.
+                          // For quick action, maybe just push to edit or show simplified dialog.
+                          // Re-using the logic requires moving it to a shared place or passing callback.
+                          // For now, let's just navigate to edit/details to complete it properly.
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditReminderScreen(reminder: reminder),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }).toList(),
                 );
               },
             ),
