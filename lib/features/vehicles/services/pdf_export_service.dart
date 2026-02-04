@@ -8,12 +8,13 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:open_filex/open_filex.dart';
 
 class PdfExportService {
-  // App theme colors
-  static final PdfColor primaryColor = PdfColor.fromHex('#1A237E');
-  static final PdfColor secondaryColor = PdfColor.fromHex('#D4AF37');
-  static final PdfColor surfaceColor = PdfColor.fromHex('#F5F7FA');
-  static final PdfColor errorColor = PdfColor.fromHex('#C62828');
-  static final PdfColor grey600 = PdfColor.fromHex('#616161');
+  // App theme colors - Carbon Sport Palette (Adapted for Print)
+  static final PdfColor primaryColor = PdfColor.fromHex('#111111'); // Carbon Black
+  static final PdfColor secondaryColor = PdfColor.fromHex('#EB0029'); // Racing Red
+  static final PdfColor surfaceColor = PdfColor.fromHex('#FFFFFF'); // White Paper
+  static final PdfColor backgroundHighlight = PdfColor.fromHex('#F5F5F5'); // Very Light Grey for contrast
+  static final PdfColor errorColor = PdfColor.fromHex('#CF6679');
+  static final PdfColor grey600 = PdfColor.fromHex('#757575'); // Medium Grey
 
   static Future<String> exportMaintenanceToPdf(
     Vehicle vehicle,
@@ -169,7 +170,7 @@ class PdfExportService {
         pw.Container(
           padding: const pw.EdgeInsets.all(16),
           decoration: pw.BoxDecoration(
-            color: surfaceColor,
+            color: backgroundHighlight,
             borderRadius: pw.BorderRadius.circular(8),
           ),
           child: pw.Row(
@@ -300,7 +301,7 @@ class PdfExportService {
               return pw.TableRow(
                 decoration: pw.BoxDecoration(
                   color: entries.indexOf(entry) % 2 == 0
-                      ? PdfColors.grey50
+                      ? backgroundHighlight
                       : PdfColors.white,
                 ),
                 children: [

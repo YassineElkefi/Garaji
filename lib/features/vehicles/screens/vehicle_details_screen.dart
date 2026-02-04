@@ -179,8 +179,8 @@ class VehicleDetailsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFF1A237E),
-                        const Color(0xFF1A237E).withValues(alpha: 0.8),
+                        const Color(0xFFDC143C),
+                        const Color(0xFFDC143C).withValues(alpha: 0.8),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -188,7 +188,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF1A237E).withValues(alpha: 0.3),
+                        color: const Color(0xFFDC143C).withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -292,7 +292,7 @@ class VehicleDetailsScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF212121),
+                color: Colors.white,
               ),
             ),
 
@@ -317,14 +317,14 @@ class VehicleDetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
                               color: const Color(
-                                0xFF1A237E,
+                                0xFFDC143C,
                               ).withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
                               Icons.build_circle_outlined,
                               size: 64,
-                              color: Color(0xFF1A237E),
+                              color: Color(0xFFDC143C),
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -333,7 +333,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF212121),
+                              color: Colors.white,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -377,7 +377,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF212121),
+                                color: Colors.white,
                               ),
                             ),
                             Text(
@@ -385,7 +385,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF1A237E),
+                                color: Color(0xFFDC143C),
                               ),
                             ),
                           ],
@@ -452,14 +452,14 @@ class VehicleDetailsScreen extends StatelessWidget {
                                                 ),
                                                 decoration: BoxDecoration(
                                                   color: const Color(
-                                                    0xFF1A237E,
+                                                    0xFFDC143C,
                                                   ).withValues(alpha: 0.1),
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                 ),
                                                 child: const Icon(
                                                   Icons.build,
-                                                  color: Color(0xFF1A237E),
+                                                  color: Color(0xFFDC143C),
                                                   size: 24,
                                                 ),
                                               ),
@@ -470,7 +470,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
-                                                    color: Color(0xFF212121),
+                                                    color: Colors.white,
                                                   ),
                                                   maxLines: 2,
                                                   overflow:
@@ -496,7 +496,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Color(0xFF1A237E),
+                                                    color: Color(0xFFDC143C),
                                                   ),
                                                 ),
                                               ),

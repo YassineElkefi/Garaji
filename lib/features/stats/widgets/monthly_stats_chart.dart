@@ -16,13 +16,13 @@ class MonthlyStatsChart extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF1A237E).withValues(alpha: 0.1),
+                color: const Color(0xFFDC143C).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.bar_chart,
                 size: 48,
-                color: Color(0xFF1A237E),
+                color: Color(0xFFDC143C),
               ),
             ),
             const SizedBox(height: 16),
@@ -51,7 +51,7 @@ class MonthlyStatsChart extends StatelessWidget {
                 BarChartRodData(
                   toY: monthEntry.value,
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF1A237E), Color(0xFFD4AF37)],
+                    colors: [Color(0xFFDC143C), Color(0xFFD4AF37)],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),
@@ -114,7 +114,7 @@ class MonthlyStatsChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: maxY / 5,
             getDrawingHorizontalLine: (value) {
-              return FlLine(color: Colors.grey.shade300, strokeWidth: 1);
+              return FlLine(color: Colors.white.withValues(alpha: 0.1), strokeWidth: 1);
             },
           ),
           borderData: FlBorderData(show: false),
